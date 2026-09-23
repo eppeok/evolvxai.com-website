@@ -1,0 +1,30 @@
+services:
+  # Uses whatever DATABASE_URL is set in .env (the live MongoDB Atlas
+  # cluster). The local `mongo` service below is kept for anyone who wants
+  # to develop against a local database again later — it's optional and
+  # not started by default.
+  app:
+    build: .
+    container_name: evolvxai-app
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+
+  mongo:
+    image: mongo:7
+    container_name: evolvxai-mongo
+    restart: unless-stopped
+    profiles:
+      - local-db
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_DATABASE: evolvxai
+    command:
+      - --storageEngine=wiredTiger
+    volumes:
+      - evolvxai-mongo-data:/data/db
+
+volumes:
+  evolvxai-mongo-data:

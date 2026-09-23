@@ -1,0 +1,154 @@
+/* Ported from the live "/faq" GHL reference page. Prefixed evx-fq- (faq) so
+   it never collides with other pages' own evx- scoped styles when multiple
+   stylesheets are loaded at once. Custom properties are declared on
+   .evx-fq-page (not :root) so they can't leak into or override the site's
+   shared theme tokens. Fonts are Poppins (headings) / Lato (body) via
+   next/font, matching every other page. Header/footer are intentionally
+   omitted — the shared site Header/Footer from the root layout are used. */
+
+.evx-fq-page, .evx-fq-page *, .evx-fq-page *::before, .evx-fq-page *::after { box-sizing: border-box; }
+
+.evx-fq-page {
+  --evx-fq-purple: #6c4bff;
+  --evx-fq-purple-light: #eae5ff;
+  --evx-fq-purple-soft: #f5f3ff;
+  --evx-fq-bg: #fbfcfd;
+  --evx-fq-border: #d9d9d9;
+  --evx-fq-text: #000;
+  --evx-fq-muted: #616161;
+  --evx-fq-white: #fff;
+  --evx-fq-headline: var(--evx-fq-font-heading), 'Poppins', sans-serif;
+  --evx-fq-content: var(--evx-fq-font-body), 'Lato', sans-serif;
+
+  margin: 0;
+  font-family: var(--evx-fq-content);
+  color: var(--evx-fq-text);
+  background: var(--evx-fq-white);
+  -webkit-font-smoothing: antialiased;
+}
+.evx-fq-page h1, .evx-fq-page h2, .evx-fq-page h3, .evx-fq-page h4, .evx-fq-page p, .evx-fq-page blockquote { margin: 0; }
+.evx-fq-page img, .evx-fq-page video { max-width: 100%; vertical-align: middle; }
+.evx-fq-page :where(a) { color: inherit; text-decoration: none; }
+.evx-fq-page ul { list-style: none; margin: 0 0 8px; padding: 0; }
+
+.evx-fq-container { max-width: 1170px; margin: 0 auto; }
+
+.evx-fq-pill {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 16px;
+  padding: 8px 24px;
+  background: var(--evx-fq-purple-light);
+  color: var(--evx-fq-purple);
+  font: 600 14px/1.3 var(--evx-fq-headline);
+  text-transform: uppercase;
+  text-align: center;
+  border-radius: 150px;
+}
+
+.evx-fq-title { font: 600 36px/1.3 var(--evx-fq-headline); text-align: center; }
+.evx-fq-accent { color: var(--evx-fq-purple); }
+.evx-fq-lead { font-size: 18px; line-height: 1.3; color: var(--evx-fq-muted); text-align: center; }
+
+.evx-fq-btn {
+  display: inline-block;
+  padding: 15px 32px;
+  background: var(--evx-fq-purple);
+  color: var(--evx-fq-white);
+  font: 600 16px/1.3 var(--evx-fq-headline);
+  text-transform: capitalize;
+  border-radius: 150px;
+  box-shadow: 5px 5px 15px 1px #84848463;
+  transition: opacity .2s;
+  border: 0;
+  cursor: pointer;
+}
+.evx-fq-btn:hover { opacity: .92; transform: translateY(-3px); box-shadow: 8px 14px 24px 1px #84848463; }
+.evx-fq-btn-white { background: var(--evx-fq-white); color: var(--evx-fq-purple); }
+.evx-fq-btn-wrap { text-align: center; margin-top: 30px; }
+
+/* Animations: scroll-reveal (JS-driven via ScrollAnimations.tsx). --evx-fq-i
+   lets any .map() loop stagger its children by passing
+   style={{ '--evx-fq-i': i }}. All motion is disabled under
+   prefers-reduced-motion at the bottom. */
+.evx-fq-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .7s cubic-bezier(.22,.68,0,1), transform .7s cubic-bezier(.22,.68,0,1);
+  transition-delay: calc(var(--evx-fq-i, 0) * 90ms);
+}
+.evx-fq-reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+@keyframes evx-fq-fade-up { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+.evx-fq-hero h1, .evx-fq-hero p, .evx-fq-hero .evx-fq-pill { animation: evx-fq-fade-up .8s cubic-bezier(.22,.68,0,1) both; }
+.evx-fq-hero .evx-fq-pill { animation-delay: 0s; }
+.evx-fq-hero h1 { animation-delay: .08s; }
+.evx-fq-hero p { animation-delay: .16s; }
+
+.evx-fq-quote-card, .evx-fq-item {
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.evx-fq-quote-card:hover { transform: translateY(-6px); box-shadow: 0 16px 32px -12px rgba(108, 75, 255, .25); }
+.evx-fq-item:hover { box-shadow: 0 8px 20px -10px rgba(108, 75, 255, .2); }
+
+@media (prefers-reduced-motion: reduce) {
+  .evx-fq-hero h1, .evx-fq-hero p, .evx-fq-hero .evx-fq-pill { animation: none; opacity: 1; transform: none; }
+  .evx-fq-page .evx-fq-reveal { opacity: 1; transform: none; transition: none; }
+}
+
+.evx-fq-hero { background: radial-gradient(ellipse at top, #ece5ff 0%, #f5f3ff 45%, #fbfcfd 100%); padding: 100px 20px 80px; text-align: center; }
+.evx-fq-hero h1 { font: 600 48px/1.3 var(--evx-fq-headline); margin-bottom: 14px; }
+.evx-fq-hero p { max-width: 640px; margin: 0 auto; font-size: 18px; line-height: 1.6; color: var(--evx-fq-muted); }
+
+.evx-fq-faq { padding: 80px 20px; }
+.evx-fq-faq .evx-fq-title { margin-bottom: 8px; }
+.evx-fq-faq .evx-fq-lead { margin-bottom: 40px; }
+.evx-fq-list { display: grid; gap: 10px; max-width: 800px; margin: 0 auto; }
+.evx-fq-item { background: var(--evx-fq-white); border: 1px solid var(--evx-fq-border); border-radius: 10px; }
+.evx-fq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 15px;
+  font: 500 18px/1.5 var(--evx-fq-headline);
+  cursor: pointer;
+  list-style: none;
+}
+.evx-fq-item summary::-webkit-details-marker { display: none; }
+.evx-fq-item summary svg { flex-shrink: 0; color: var(--evx-fq-text); transition: transform .2s; }
+.evx-fq-item[open] summary svg { transform: rotate(180deg); }
+.evx-fq-item-body { padding: 0 15px 15px; font-size: 16px; line-height: 1.6; color: var(--evx-fq-muted); }
+.evx-fq-item-body p { margin-bottom: 8px; }
+.evx-fq-item-body p:last-child { margin-bottom: 0; }
+.evx-fq-item-body ul { margin-bottom: 8px; }
+.evx-fq-item-body li { position: relative; padding: 2px 0 2px 20px; }
+.evx-fq-item-body li svg { position: absolute; left: 0; top: 6px; color: var(--evx-fq-purple); }
+
+.evx-fq-testimonials { background: var(--evx-fq-bg); padding: 80px 20px; }
+.evx-fq-testimonials .evx-fq-title { margin-bottom: 8px; }
+.evx-fq-testimonials .evx-fq-lead { margin-bottom: 30px; }
+.evx-fq-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1170px; margin: 0 auto; }
+.evx-fq-quote-card { padding: 18px; background: var(--evx-fq-white); border: 1px solid var(--evx-fq-border); border-radius: 12px; box-shadow: 5px 5px 15px #bfbfbf5e; display: flex; flex-direction: column; }
+.evx-fq-quote-card .evx-fq-mark { color: var(--evx-fq-purple); margin-bottom: 10px; }
+.evx-fq-quote-card .evx-fq-stars { display: flex; gap: 2px; color: #ffb800; margin-bottom: 10px; }
+.evx-fq-quote-card .evx-fq-stars svg { fill: currentColor; }
+.evx-fq-quote-card blockquote { font-size: 16px; line-height: 1.6; font-style: italic; color: var(--evx-fq-muted); flex: 1; }
+.evx-fq-quote-card footer { margin-top: 18px; padding-top: 14px; border-top: 1px solid #e6e6e6; }
+.evx-fq-quote-card footer strong { display: block; font: 600 18px/1.3 var(--evx-fq-content); }
+.evx-fq-quote-card footer span { font-size: 16px; line-height: 1.3; color: var(--evx-fq-muted); }
+
+.evx-fq-cta { background: linear-gradient(135deg, #6c4bff 0%, #5a3fd9 55%, #3d2a99 100%); padding: 80px 20px; text-align: center; color: var(--evx-fq-white); }
+.evx-fq-cta h2 { font: 600 32px/1.3 var(--evx-fq-headline); margin-bottom: 12px; }
+.evx-fq-cta p { max-width: 620px; margin: 0 auto 18px; font-size: 16px; line-height: 1.6; }
+
+@media (max-width: 1024px) {
+  .evx-fq-grid-3 { grid-template-columns: 1fr; }
+}
+@media (max-width: 767px) {
+  .evx-fq-hero { padding: 70px 16px 50px; }
+  .evx-fq-hero h1 { font-size: 32px; }
+  .evx-fq-title { font-size: 28px; }
+  .evx-fq-faq, .evx-fq-testimonials, .evx-fq-cta { padding: 50px 16px; }
+  .evx-fq-item summary { font-size: 16px; }
+}
